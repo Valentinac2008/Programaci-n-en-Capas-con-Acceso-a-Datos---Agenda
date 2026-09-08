@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿```csharp
+using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 
 namespace Agenda.Datos
@@ -7,8 +9,6 @@ namespace Agenda.Datos
     {
         private string _conexionString =
             "Server=localhost;Database=agenda;Uid=root;Pwd=TU_CLAVE;";
-
-
 
         public bool Agregar(
             string dni,
@@ -20,6 +20,21 @@ namespace Agenda.Datos
             string ciudad,
             string telefono,
             string email,
+            string cuilCuit,
+            DateTime fechaAlta,
+            string estadoCivil,
+            string nacionalidad,
+            string provincia,
+            string codigoPostal,
+            string barrio,
+            string telefonoAlternativo,
+            string instagram,
+            string profesionOcupacion,
+            string empresaLugarTrabajo,
+            string nivelEstudios,
+            string estado,
+            string metodoPagoPreferido,
+            string observaciones,
             DateTime fechaApertura,
             decimal limiteCredito,
             string estadoCredito)
@@ -36,11 +51,59 @@ namespace Agenda.Datos
                 {
                     string queryPersona = @"
                         INSERT INTO contactos
-                        (Dni, Apellido, Nombres, Calle, Depto,
-                         Piso, Ciudad, Telefono, Email)
+                        (
+                            Dni,
+                            Apellido,
+                            Nombres,
+                            Calle,
+                            Depto,
+                            Piso,
+                            Ciudad,
+                            Telefono,
+                            Email,
+                            CuilCuit,
+                            FechaAlta,
+                            EstadoCivil,
+                            Nacionalidad,
+                            Provincia,
+                            CodigoPostal,
+                            Barrio,
+                            TelefonoAlternativo,
+                            Instagram,
+                            ProfesionOcupacion,
+                            EmpresaLugarTrabajo,
+                            NivelEstudios,
+                            Estado,
+                            MetodoPagoPreferido,
+                            Observaciones
+                        )
                         VALUES
-                        (@Dni, @Apellido, @Nombres, @Calle, @Depto,
-                         @Piso, @Ciudad, @Telefono, @Email)";
+                        (
+                            @Dni,
+                            @Apellido,
+                            @Nombres,
+                            @Calle,
+                            @Depto,
+                            @Piso,
+                            @Ciudad,
+                            @Telefono,
+                            @Email,
+                            @CuilCuit,
+                            @FechaAlta,
+                            @EstadoCivil,
+                            @Nacionalidad,
+                            @Provincia,
+                            @CodigoPostal,
+                            @Barrio,
+                            @TelefonoAlternativo,
+                            @Instagram,
+                            @ProfesionOcupacion,
+                            @EmpresaLugarTrabajo,
+                            @NivelEstudios,
+                            @Estado,
+                            @MetodoPagoPreferido,
+                            @Observaciones
+                        )";
 
                     MySqlCommand comandoPersona =
                         new MySqlCommand(
@@ -59,19 +122,42 @@ namespace Agenda.Datos
                     comandoPersona.Parameters.AddWithValue("@Telefono", telefono);
                     comandoPersona.Parameters.AddWithValue("@Email", email);
 
+                    comandoPersona.Parameters.AddWithValue("@CuilCuit", cuilCuit);
+                    comandoPersona.Parameters.AddWithValue("@FechaAlta", fechaAlta);
+                    comandoPersona.Parameters.AddWithValue("@EstadoCivil", estadoCivil);
+                    comandoPersona.Parameters.AddWithValue("@Nacionalidad", nacionalidad);
+                    comandoPersona.Parameters.AddWithValue("@Provincia", provincia);
+                    comandoPersona.Parameters.AddWithValue("@CodigoPostal", codigoPostal);
+                    comandoPersona.Parameters.AddWithValue("@Barrio", barrio);
+                    comandoPersona.Parameters.AddWithValue("@TelefonoAlternativo", telefonoAlternativo);
+                    comandoPersona.Parameters.AddWithValue("@Instagram", instagram);
+                    comandoPersona.Parameters.AddWithValue("@ProfesionOcupacion", profesionOcupacion);
+                    comandoPersona.Parameters.AddWithValue("@EmpresaLugarTrabajo", empresaLugarTrabajo);
+                    comandoPersona.Parameters.AddWithValue("@NivelEstudios", nivelEstudios);
+                    comandoPersona.Parameters.AddWithValue("@Estado", estado);
+                    comandoPersona.Parameters.AddWithValue("@MetodoPagoPreferido", metodoPagoPreferido);
+                    comandoPersona.Parameters.AddWithValue("@Observaciones", observaciones);
+
                     comandoPersona.ExecuteNonQuery();
 
                     long idPersona =
                         comandoPersona.LastInsertedId;
 
-
                     string queryCuenta = @"
                         INSERT INTO CuentaCte
-                        (IdPersona, FechaApertura,
-                         LimiteCredito, EstadoCredito)
+                        (
+                            IdPersona,
+                            FechaApertura,
+                            LimiteCredito,
+                            EstadoCredito
+                        )
                         VALUES
-                        (@IdPersona, @FechaApertura,
-                         @LimiteCredito, @EstadoCredito)";
+                        (
+                            @IdPersona,
+                            @FechaApertura,
+                            @LimiteCredito,
+                            @EstadoCredito
+                        )";
 
                     MySqlCommand comandoCuenta =
                         new MySqlCommand(
@@ -115,8 +201,6 @@ namespace Agenda.Datos
             }
         }
 
-
-
         public DataTable BuscarPorDni(string dni)
         {
             string query = @"
@@ -125,12 +209,9 @@ namespace Agenda.Datos
                        CuentaCte.FechaApertura,
                        CuentaCte.LimiteCredito,
                        CuentaCte.EstadoCredito
-
                 FROM contactos
-
                 LEFT JOIN CuentaCte
                 ON contactos.IdPersona = CuentaCte.IdPersona
-
                 WHERE contactos.Dni = @Dni";
 
             using (MySqlConnection conexion =
@@ -156,8 +237,6 @@ namespace Agenda.Datos
             }
         }
 
-
-
         public DataTable BuscarPorApellido(string apellido)
         {
             string query = @"
@@ -166,12 +245,9 @@ namespace Agenda.Datos
                        CuentaCte.FechaApertura,
                        CuentaCte.LimiteCredito,
                        CuentaCte.EstadoCredito
-
                 FROM contactos
-
                 LEFT JOIN CuentaCte
                 ON contactos.IdPersona = CuentaCte.IdPersona
-
                 WHERE contactos.Apellido LIKE @Apellido";
 
             using (MySqlConnection conexion =
@@ -196,9 +272,6 @@ namespace Agenda.Datos
                 return tabla;
             }
         }
-
-
-
         public DataTable BuscarPorNombres(string nombres)
         {
             string query = @"
@@ -207,12 +280,9 @@ namespace Agenda.Datos
                        CuentaCte.FechaApertura,
                        CuentaCte.LimiteCredito,
                        CuentaCte.EstadoCredito
-
                 FROM contactos
-
                 LEFT JOIN CuentaCte
                 ON contactos.IdPersona = CuentaCte.IdPersona
-
                 WHERE contactos.Nombres LIKE @Nombres";
 
             using (MySqlConnection conexion =
@@ -238,8 +308,6 @@ namespace Agenda.Datos
             }
         }
 
-
-
         public DataTable BuscarPorCalle(string calle)
         {
             string query = @"
@@ -248,12 +316,9 @@ namespace Agenda.Datos
                        CuentaCte.FechaApertura,
                        CuentaCte.LimiteCredito,
                        CuentaCte.EstadoCredito
-
                 FROM contactos
-
                 LEFT JOIN CuentaCte
                 ON contactos.IdPersona = CuentaCte.IdPersona
-
                 WHERE contactos.Calle LIKE @Calle";
 
             using (MySqlConnection conexion =
@@ -278,7 +343,6 @@ namespace Agenda.Datos
                 return tabla;
             }
         }
-
 
 
         public bool Eliminar(string dni)
@@ -307,7 +371,6 @@ namespace Agenda.Datos
         }
 
 
-
         public bool Modificar(
             string dniOriginal,
             string dniNuevo,
@@ -319,6 +382,21 @@ namespace Agenda.Datos
             string ciudad,
             string telefono,
             string email,
+            string cuilCuit,
+            DateTime fechaAlta,
+            string estadoCivil,
+            string nacionalidad,
+            string provincia,
+            string codigoPostal,
+            string barrio,
+            string telefonoAlternativo,
+            string instagram,
+            string profesionOcupacion,
+            string empresaLugarTrabajo,
+            string nivelEstudios,
+            string estado,
+            string metodoPagoPreferido,
+            string observaciones,
             DateTime fechaApertura,
             decimal limiteCredito,
             string estadoCredito)
@@ -362,7 +440,6 @@ namespace Agenda.Datos
                     int idPersona =
                         Convert.ToInt32(resultado);
 
-
                     string queryPersona = @"
                         UPDATE contactos
                         SET
@@ -374,7 +451,22 @@ namespace Agenda.Datos
                             Piso = @Piso,
                             Ciudad = @Ciudad,
                             Telefono = @Telefono,
-                            Email = @Email
+                            Email = @Email,
+                            CuilCuit = @CuilCuit,
+                            FechaAlta = @FechaAlta,
+                            EstadoCivil = @EstadoCivil,
+                            Nacionalidad = @Nacionalidad,
+                            Provincia = @Provincia,
+                            CodigoPostal = @CodigoPostal,
+                            Barrio = @Barrio,
+                            TelefonoAlternativo = @TelefonoAlternativo,
+                            Instagram = @Instagram,
+                            ProfesionOcupacion = @ProfesionOcupacion,
+                            EmpresaLugarTrabajo = @EmpresaLugarTrabajo,
+                            NivelEstudios = @NivelEstudios,
+                            Estado = @Estado,
+                            MetodoPagoPreferido = @MetodoPagoPreferido,
+                            Observaciones = @Observaciones
                         WHERE IdPersona = @IdPersona";
 
                     MySqlCommand comandoPersona =
@@ -434,9 +526,83 @@ namespace Agenda.Datos
                         email
                     );
 
+                    comandoPersona.Parameters.AddWithValue(
+                        "@CuilCuit",
+                        cuilCuit
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@FechaAlta",
+                        fechaAlta
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@EstadoCivil",
+                        estadoCivil
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Nacionalidad",
+                        nacionalidad
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Provincia",
+                        provincia
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@CodigoPostal",
+                        codigoPostal
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Barrio",
+                        barrio
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@TelefonoAlternativo",
+                        telefonoAlternativo
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Instagram",
+                        instagram
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@ProfesionOcupacion",
+                        profesionOcupacion
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@EmpresaLugarTrabajo",
+                        empresaLugarTrabajo
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@NivelEstudios",
+                        nivelEstudios
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Estado",
+                        estado
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@MetodoPagoPreferido",
+                        metodoPagoPreferido
+                    );
+
+                    comandoPersona.Parameters.AddWithValue(
+                        "@Observaciones",
+                        observaciones
+                    );
+
                     comandoPersona.ExecuteNonQuery();
-
-
+                    
                     string queryCuenta = @"
                         UPDATE CuentaCte
                         SET
@@ -488,3 +654,4 @@ namespace Agenda.Datos
         }
     }
 }
+```
